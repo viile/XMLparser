@@ -16,22 +16,19 @@ void main()
 		<trade_type><![CDATA[APP]]></trade_type>
 		</xml>`;
 
-	XMLtree root = new XMLtree("root");
-	strToTree(root,str,0,str.length.to!int);
+	//XMLtree root = new XMLtree("root");
+	//strToTree(root,str,0,str.length.to!int);
 }
 
-XMLtree strToTree(XMLtree parent,string str,int s,int e)
+Element strToTree(string str,int s,int e)
 {
 	//writeln(s,"",e,"",str[s]);
-	if(s > e)return parent;
-	if(str[s] == '\n')
-		return strToTree(parent,str,s+1,e);
-	if(s == 0)
-		return strToTree(parent,str,5,str.length.to!int - 6);
+	if(s > e)return new Normal;
 	while(s < e){
 	//Node node = pushNode(str,s,e);
 	//writeln(node);
-	return parent;
+	}
+	return new Normal;
 }
 /*
 Node pushNode(string str,int s,int e)
@@ -62,57 +59,80 @@ Node pushNode(string str,int s,int e)
 	return node;
 }
 */
+struct Node{
+	string name;
+	string value;
+	int start;
+	int end;
+}
 abstract class Element
 {
+	this(){}
 	public string Evaluate();
 }
 
 class Statement : Element
 {
-	Element parent;
-	string value;
+	Node node;
+	this(){}
+	this(Node node)
+	{
+		this.node = node;
+	}
 	override public string Evaluate(){
-		return value;
+		return node.value;
 	}
 }
 class Annotations : Element
 {
-	Element parent;
-	string value;
+	Node node;
+	this(){}
+	this(Node node)
+	{
+		this.node = node;
+	}
 	override public string Evaluate(){
-		return value;
+		return node.value;
 	}
 }
 class Cdata : Element
 {
-	Element parent;
-	string value;
+	Node node;
+	this(){}
+	this(Node node)
+	{
+		this.node = node;
+	}
 	override public string Evaluate(){
-		return value;
+		return node.value;
 	}
 }
-class Node : Element
+class Normal : Element
 {
-	Element parent;
+	Node node;
 	string value;
+	this(){}
+	this(Node node)
+	{
+		this.node = node;
+	}
 	override public string Evaluate(){
-		return value;
+		return node.value;
 	}
 }
 
 class XMLtree : Element
 {
-	string node;
-	string value;
-	XMLtree parent;
-	XMLtree[string] childs;
+	Node node;
+	Element parent;
+	Element[string] childs;
 
-	this()
-	{
-	
-	}
-	this(string node)
+	this(){}
+	this(Node node)
 	{
 		this.node = node;
+	}
+	override public string Evaluate(){
+		return node.value;
 	}
 }
